@@ -10,6 +10,10 @@ services:
       - "80"
     mem_limit: 500m
     cpus: "0.25"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rinha
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=secret
 
   api2: # API - Instância 02
     build:
@@ -22,6 +26,10 @@ services:
       - "80"
     mem_limit: 500m
     cpus: "0.25"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/rinha
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=secret
 
   nginx: # Load Balancer
     image: nginx:latest
@@ -36,6 +44,17 @@ services:
     cpus: "0.25"
 
   db: # Banco de dados
-    image: postgres
-    mem_limit: 1500
+    image: postgres:latest
+    mem_limit: 1500m
     cpus: "0.75"
+    environment:
+      POSTGRES_DB: rinha
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+
+volumes:
+  pgdata:

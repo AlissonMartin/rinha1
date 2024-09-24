@@ -9,7 +9,7 @@ RUN mvn clean install -DskipTests=true
 
 FROM openjdk:17-jdk-slim
 
-COPY --from=build /app/target/api-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --from=build /app/target/rinha-0.0.1-SNAPSHOT.jar /app/app.jar
 
 WORKDIR /app
 
