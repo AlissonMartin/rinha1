@@ -37,12 +37,4 @@ public class ApiController {
 
     return ResponseEntity.ok(user);
   }
-
-
-  @GetMapping("/contagem-pessoas")
-  public ResponseEntity countUsers() {
-    long usersCount = userService.count();
-
-    return ResponseEntity.ok(usersCount);
-  }
 }
