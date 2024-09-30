@@ -9,7 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_apelido", columnList = "apelido"),
+        @Index(name = "idx_nome", columnList = "nome"),
+        @Index(name = "idx_stack", columnList = "stack")
+})
 @Getter
 @Setter
 public class User {
