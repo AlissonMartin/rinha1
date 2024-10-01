@@ -20,6 +20,9 @@ public class ApiController {
 
   @PostMapping("")
   public ResponseEntity create(@Validated @RequestBody CreateDTO body) {
+    if (body.apelido() == null || body.apelido().isBlank() || body.apelido().length() > 32 || body.nome() == null || body.nome().isBlank() || body.nome().length() > 100) {
+      return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+    }
     userService.create(body);
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }

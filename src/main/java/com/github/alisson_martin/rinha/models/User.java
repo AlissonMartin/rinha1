@@ -23,6 +23,7 @@ public class User {
   @UuidGenerator
   private String id;
 
+  @Column(unique = true)
   private String apelido;
 
   private String nome;
