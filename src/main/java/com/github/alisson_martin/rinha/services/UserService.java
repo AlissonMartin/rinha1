@@ -15,14 +15,16 @@ public class UserService {
   @Autowired
   UserRepository userRepository;
 
-  public User create(CreateDTO data) {
+  public String create(CreateDTO data) {
     User user = new User();
     user.setApelido(data.apelido());
     user.setNome(data.nome());
     user.setStack(data.stack());
     user.setNascimento(data.nascimento());
 
-    return userRepository.save(user);
+    User createdUser = userRepository.save(user);
+
+    return createdUser.getId();
   }
 
   public User getById(String uid) {

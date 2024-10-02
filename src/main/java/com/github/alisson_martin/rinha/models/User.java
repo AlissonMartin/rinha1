@@ -28,7 +28,7 @@ public class User {
 
   private String nome;
 
-  private Date nascimento;
+  private String nascimento;
 
   private List<String> stack;
 
