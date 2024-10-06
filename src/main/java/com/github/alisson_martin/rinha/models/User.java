@@ -1,24 +1,21 @@
 package com.github.alisson_martin.rinha.models;
 
-import jakarta.persistence.*;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.UuidGenerator;
-
+import java.util.UUID;
 import java.util.List;
 
-@Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Table("users")
 public class User {
 
   @Id
-  @GeneratedValue
-  @UuidGenerator
-  private String id;
+  private UUID id;
 
-  @Column(unique = true)
   private String apelido;
 
   private String nome;
@@ -26,5 +23,4 @@ public class User {
   private String nascimento;
 
   private List<String> stack;
-
 }

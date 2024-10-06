@@ -6,8 +6,11 @@ import com.github.alisson_martin.rinha.models.User;
 import com.github.alisson_martin.rinha.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -15,27 +18,27 @@ public class UserService {
   @Autowired
   UserRepository userRepository;
 
-  public String create(CreateDTO data) {
+  public Mono<UUID> create(CreateDTO data) {
     User user = new User();
+    user.setId(UUID.randomUUID());
     user.setApelido(data.apelido());
     user.setNome(data.nome());
     user.setStack(data.stack());
     user.setNascimento(data.nascimento());
 
-    User createdUser = userRepository.save(user);
+    return userRepository.save(user).map(User::getId);
 
-    return createdUser.getId();
   }
 
-  public User getById(String uid) {
-    return userRepository.findById(uid).orElseThrow(()-> new RecordNotFoundException());
+  public Mono<User> getById(String uid) {
+    return userRepository.findById(uid).switchIfEmpty(Mono.error(new RecordNotFoundException()));
   }
 
-  public List<User> list(String search) {
+  public Flux<User> list(String search) {
     return userRepository.findUsers(search);
   }
 
   public long count() {
-    return userRepository.count();
+    return userRepository.count().block();
   }
 }

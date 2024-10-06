@@ -9,10 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -26,7 +29,7 @@ public class ApiController {
     if (body.apelido() == null || body.apelido().isBlank() || body.apelido().length() > 32 || body.nome() == null || body.nome().isBlank() || body.nome().length() > 100 || nascimentoIsInvalid(body.nascimento())) {
       return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
     }
-    String uid = userService.create(body);
+    Mono<UUID> uid = userService.create(body);
 
     HttpHeaders headers = new HttpHeaders();
     headers.add(HttpHeaders.LOCATION, "/pessoas/" + uid);
@@ -34,17 +37,18 @@ public class ApiController {
   }
 
   @GetMapping("")
-  public ResponseEntity list(@RequestParam String t) {
-    List<User> users = userService.list(t);
+  @ResponseStatus(HttpStatus.OK)
+  public Flux<User> list(@RequestParam String t) {
+    return userService.list(t);
 
-    return ResponseEntity.ok(users);
+//    return ResponseEntity.ok(users);
   }
 
   @GetMapping("/{uid}")
-  public ResponseEntity getById(@PathVariable String uid) {
-    User user = userService.getById(uid);
+  @ResponseStatus(HttpStatus.OK)
+  public Mono<User> getById(@PathVariable String uid) {
+    return userService.getById(uid);
 
-    return ResponseEntity.ok(user);
   }
 
   private boolean nascimentoIsInvalid(String nascimento) {

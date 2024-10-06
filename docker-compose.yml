@@ -8,13 +8,13 @@ services:
       - db
     expose:
       - "80"
-    mem_limit: 825m
-    cpus: "0.35"
+    mem_limit: 1825m
+    cpus: "1.35"
     environment:
       - SERVER_PORT=8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/rinha
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_R2DBC_URL=r2dbc:postgresql://@localhost:5434/rinha
+      - SPRING_R2DBC_USERNAME=postgres
+      - SPRING_R2DBC_PASSWORD=secret
     network_mode: host
 
   api2: # API - Instância 02
@@ -26,13 +26,13 @@ services:
       - db
     expose:
       - "80"
-    mem_limit: 825m
-    cpus: "0.35"
+    mem_limit: 1825m
+    cpus: "1.35"
     environment:
       - SERVER_PORT=8082
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/rinha
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_R2DBC_URL=r2dbc:postgresql://@localhost:5434/rinha
+      - SPRING_R2DBC_USERNAME=postgres
+      - SPRING_R2DBC_PASSWORD=secret
     network_mode: host
 
   nginx: # Load Balancer
