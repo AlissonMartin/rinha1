@@ -25,30 +25,29 @@ public class ApiController {
   UserService userService;
 
   @PostMapping("")
-  public ResponseEntity create(@Validated @RequestBody CreateDTO body) {
+  public Mono<ResponseEntity<Void>> create(@Validated @RequestBody CreateDTO body) {
     if (body.apelido() == null || body.apelido().isBlank() || body.apelido().length() > 32 || body.nome() == null || body.nome().isBlank() || body.nome().length() > 100 || nascimentoIsInvalid(body.nascimento())) {
-      return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+      return Mono.just(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build());
     }
-    Mono<UUID> uid = userService.create(body);
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.LOCATION, "/pessoas/" + uid);
-    return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
+    return userService.create(body)
+            .map(uid -> {
+              HttpHeaders headers = new HttpHeaders();
+              headers.add(HttpHeaders.LOCATION, "/pessoas/" + uid);
+              return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
+            });
   }
 
   @GetMapping("")
   @ResponseStatus(HttpStatus.OK)
   public Flux<User> list(@RequestParam String t) {
     return userService.list(t);
-
-//    return ResponseEntity.ok(users);
   }
 
   @GetMapping("/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public Mono<User> getById(@PathVariable String uid) {
+  public Mono<User> getById(@PathVariable UUID uid) {
     return userService.getById(uid);
-
   }
 
   private boolean nascimentoIsInvalid(String nascimento) {

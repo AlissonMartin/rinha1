@@ -2,6 +2,7 @@ package com.github.alisson_martin.rinha.models;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table("users")
-public class User {
+public class User implements Persistable<UUID> {
 
   @Id
   private UUID id;
@@ -23,4 +24,9 @@ public class User {
   private String nascimento;
 
   private List<String> stack;
+
+  @Override
+  public boolean isNew() {
+    return true;
+  }
 }

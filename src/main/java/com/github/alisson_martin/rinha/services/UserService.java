@@ -26,19 +26,23 @@ public class UserService {
     user.setStack(data.stack());
     user.setNascimento(data.nascimento());
 
-    return userRepository.save(user).map(User::getId);
+    return userRepository.save(user)
+            .doOnSuccess(savedUser -> System.out.println("Usuário salvo com sucesso: " + savedUser))
+            .doOnError(error -> System.err.println("Erro ao salvar usuário: " + error.getMessage()))
+            .map(User::getId);
 
   }
 
-  public Mono<User> getById(String uid) {
+  public Mono<User> getById(UUID uid) {
     return userRepository.findById(uid).switchIfEmpty(Mono.error(new RecordNotFoundException()));
   }
 
   public Flux<User> list(String search) {
-    return userRepository.findUsers(search);
+    String searchQuery = "%" + search + "%";
+    return userRepository.findUsers(searchQuery);
   }
 
-  public long count() {
-    return userRepository.count().block();
+  public Mono<Long> count() {
+    return userRepository.count();
   }
 }

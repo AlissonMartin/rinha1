@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 public class CountController {
@@ -14,7 +15,7 @@ public class CountController {
 
   @GetMapping("/contagem-pessoas")
   public ResponseEntity countUsers() {
-    long usersCount = userService.count();
+    Mono<Long> usersCount = userService.count();
 
     return ResponseEntity.ok(usersCount);
   }
