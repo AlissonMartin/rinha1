@@ -8,11 +8,11 @@ services:
       - db
     expose:
       - "80"
-    mem_limit: 825m
-    cpus: "0.35"
+    mem_limit: 800m
+    cpus: "0.5"
     environment:
       - SERVER_PORT=8081
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/rinha
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5435/rinha
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=secret
     network_mode: host
@@ -26,11 +26,11 @@ services:
       - db
     expose:
       - "80"
-    mem_limit: 825m
-    cpus: "0.35"
+    mem_limit: 800m
+    cpus: "0.5"
     environment:
       - SERVER_PORT=8082
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5434/rinha
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5435/rinha
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=secret
     network_mode: host
@@ -42,19 +42,19 @@ services:
     depends_on:
       - api1
       - api2
-    mem_limit: 250m
+    mem_limit: 300m
     cpus: "0.1"
     network_mode: host
 
   db: # Banco de dados
     image: postgres:latest
     mem_limit: 1100m
-    cpus: "0.70"
+    cpus: "0.40"
     environment:
       POSTGRES_DB: rinha
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
-      PGPORT: 5434
+      PGPORT: 5435
     network_mode: host
     volumes:
       - ./postgresql.conf:/etc/postgresql/postgresql.conf
